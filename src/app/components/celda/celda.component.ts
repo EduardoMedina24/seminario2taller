@@ -9,7 +9,7 @@ export class CeldaComponent implements OnInit {
   @Input() letra!: string;
   @Input() palabra!: string;
   @Input() enviado: boolean = false;
-  @Input() disabled: boolean = false; // Nueva entrada para deshabilitar la celda
+  @Input() disabled: boolean = false; // Nueva entrada para deshabilitar la celda  
 
   public opcion: string = '';
   public css: string = '';
