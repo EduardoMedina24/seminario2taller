@@ -1,0 +1,19 @@
+:host {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.celda {
+    width: var(--celda-width);
+    max-width: 100px; /* Establece un ancho máximo para las celdas */
+    text-align: center;
+    display: inline-block;
+    overflow: hidden; /* Oculta el contenido que se desborde */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+.invisible {
+    display: none; /* o visibility: hidden; */
+}

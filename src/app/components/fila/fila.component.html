@@ -1,0 +1,7 @@
+
+<app-celda *ngFor="let item of letras; let i = index" [letra]="item"
+    [palabra]="palabra" class="celda"
+    [disabled]="!edicionHabilitada"
+    (keyup)="actualizarEstadoBotonVerificar()"></app-celda>
+
+<!-- <button class="invisible" (click)="verificarFila()" [disabled]="!todasCeldasConLetras">Verificar</button> -->

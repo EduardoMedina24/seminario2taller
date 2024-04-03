@@ -1,0 +1,36 @@
+.boton-centrado {
+    display: flex;
+    justify-content: center;
+    padding-top: 68px;
+}
+
+.boton-play {
+    background: rgba(13, 17, 253, 0.295);
+    border: none;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.icono-rojo {
+    color: rgb(29, 250, 0);
+    font-size: 196px;
+}
+.icono-deshabilitado {
+    opacity: 0.5; /* Reducimos la opacidad del icono para indicar que está deshabilitado */
+    pointer-events: none; /* Desactivamos eventos de ratón para que el icono no sea clickeable */
+}
+ion-content {
+    --ion-background-color: rgba(0, 0, 0, 0.705);
+    background-image: url("../../../assets/images/palabra4.jpeg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.jugador {
+    background: rgba(46, 45, 45, 0.589);
+    font-size: 26px;
+    padding-left: 10px;
+}

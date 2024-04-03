@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>inicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="small">Hola</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+
+    <div class="divpadding">
+      <h1>Bienvenido</h1>
+      <h2>{{ jugador }}</h2><br>
+      <ion-button *ngFor="let item of opciones "
+        expand="block"
+        [color]="item.color"
+        style="margin-bottom: 25px;"
+        [disabled]="jugador.length<2"
+        (click)="onSelectNivel(item.id)">{{item.name}} </ion-button><br>
+      <!-- <ion-button expand="block"color="warning"[disabled]="jugador.length<2"  >Medio</ion-button><br>
+  <ion-button expand="block"color="danger" [disabled]="jugador.length<2" >Dificil</ion-button><br><br><br> -->
+
+    </div>
+
+  </ion-content>
+
+</ion-content>

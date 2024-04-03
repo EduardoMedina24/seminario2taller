@@ -1,0 +1,13 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Inicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-input label="Jugador" labelPlacement="stacked" [(ngModel)]="jugador" placeholder="Digite su Nombre"></ion-input>
+  <ion-button expand="block"  [disabled]="jugador.length < 2" (click)="irAPaginaDificultad()">
+    <ion-icon name="play-outline"></ion-icon>
+  </ion-button>
+
+</ion-content>
