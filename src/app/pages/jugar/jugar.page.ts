@@ -15,6 +15,7 @@ export class JugarPage implements OnInit {
   public botonEnviarHabilitado: boolean = false;
   public filaActual: number = 0; // Variable para rastrear la fila actualmente habilitada
   public ganaste: boolean = false; // Variable para rastrear si el juego se ha ganado
+  public perdiste: boolean = false;
 
   public opciones: any =[
     {id: 1, name:'Fácil',opc: 7,color: 'success'},
@@ -36,15 +37,28 @@ export class JugarPage implements OnInit {
     private router: Router
     ) { }
 
-  enviar() {
-    if (this.filaActual < this.nivel.opc - 1) {
-      this.filas.toArray()[this.filaActual].verificarFila();
-      this.filaActual++; // Incrementar el índice de la fila actualmente habilitada
-      this.botonEnviarHabilitado = false;
-    } else {
-      console.log("¡Última fila alcanzada!");
+    enviar() {
+      if (this.filaActual < this.nivel.opc) {
+        this.filas.toArray()[this.filaActual].verificarFila();
+        this.filaActual++; // Incrementar el índice de la fila actualmente habilitada
+        // Verificar si es la última fila para activar el botón de enviar
+        if (this.filaActual === this.nivel.opc) {
+          if (!this.filas.toArray()[this.filaActual - 1].celdas.toArray().every(celda => celda.css === 'acierto')) {
+            // Si no todas las celdas de la última fila están en acierto, mostrar mensaje de "Perdiste"
+            this.perdiste = true;
+            setTimeout(() => {
+              this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Redireccionar a la página "nevel" y pasar el jugador como parámetro
+            }, 3000);
+          } else {
+            this.botonEnviarHabilitado = true;
+          }
+        }
+      } else {
+        console.log("¡Última fila alcanzada!");
+      }
     }
-  }
+    
+    
 
   actualizarEstadoBotonEnviar() {
     console.log('Fila actual:', this.filaActual);

@@ -11,4 +11,7 @@
     <div *ngIf="ganaste" class="mensaje-ganaste">
       ¡Ganaste! Todas las celdas de la fila actual están en acierto.
     </div>
+    <div *ngIf="!ganaste && perdiste" class="mensaje-perdiste">
+      ¡Perdiste! No todas las celdas de la última fila están en acierto.
+    </div>
 </ion-content>
