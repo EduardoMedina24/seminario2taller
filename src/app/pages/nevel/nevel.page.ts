@@ -26,6 +26,10 @@ export class NevelPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.jugador = params['jugador'];
     });
+    const jugadorLocalStorage = localStorage.getItem('jugador');
+    if (jugadorLocalStorage !== null) {
+      this.jugador = jugadorLocalStorage;
+    }
   }
 
   onSelectNivel(id: number){
