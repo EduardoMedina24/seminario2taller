@@ -1,6 +1,8 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilaComponent } from 'src/app/components/fila/fila.component';
+import { ViewChild, ElementRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-jugar',
@@ -11,7 +13,9 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
-  @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;          
+  @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>; 
+  @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
+         
   public botonEnviarHabilitado: boolean = false;
   public filaActual: number = 0; // Variable para rastrear la fila actualmente habilitada
   public ganaste: boolean = false; // Variable para rastrear si el juego se ha ganado
@@ -95,5 +99,19 @@ export class JugarPage implements OnInit {
     this.palabra = this.palabras[rand]
     console.log(this.iteraciones)
     localStorage.setItem('jugador', this.jugador);
+  }
+
+  ngAfterViewInit() {
+    // Reproducir el audio después de que la vista se haya inicializado
+    if (this.audioPlayer) {
+      this.audioPlayer.nativeElement.play();
+    }
+  }
+
+  ngOnDestroy() {
+    // Detener la reproducción cuando la página se destruye
+    if (this.audioPlayer) {
+      this.audioPlayer.nativeElement.pause();
+    }
   }
 }

@@ -9,9 +9,13 @@
   <ion-button expand="block" (click)="enviar()"
     [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
     <div *ngIf="ganaste" class="mensaje-ganaste">
-      ¡Ganaste! Todas las celdas de la fila actual están en acierto.
+      ¡Ganaste! 
     </div>
     <div *ngIf="!ganaste && perdiste" class="mensaje-perdiste">
-      ¡Perdiste! No todas las celdas de la última fila están en acierto.
+      ¡Perdiste! 
     </div>
+    <audio #audioPlayer loop autoplay>
+      <source src="../../../assets/audio/jmesa.mp3 " type="audio/mpeg">
+    </audio>
+    
 </ion-content>
