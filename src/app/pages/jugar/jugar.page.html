@@ -8,5 +8,7 @@
     (verificarFilaEvent)="actualizarEstadoBotonEnviar()"></app-fila>
   <ion-button expand="block" (click)="enviar()"
     [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
-
+    <div *ngIf="ganaste" class="mensaje-ganaste">
+      ¡Ganaste! Todas las celdas de la fila actual están en acierto.
+    </div>
 </ion-content>
