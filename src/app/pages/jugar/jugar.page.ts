@@ -11,15 +11,16 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
-  @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;          //Esta anotación se utiliza para obtener una instancia de todos los componentes FilaComponent
+  @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;          
   public botonEnviarHabilitado: boolean = false;
+  public filaActual: number = 0; // Variable para rastrear la fila actualmente habilitada
 
   public opciones: any =[
     {id: 1, name:'Fácil',opc: 7,color: 'success'},
     {id: 2, name:'Normal',opc: 5,color: 'warning'},
     {id: 3, name:'Difícil',opc: 2,color: 'danger'},
-
   ]
+
   public iteraciones: number[] = []
 
   public palabras: string[] =[
@@ -29,13 +30,11 @@ export class JugarPage implements OnInit {
   public palabra: string=''
   public enviado: boolean = false;
 
-
-
   enviar() {
-    const indexFilaHabilitada = this.filas.toArray().findIndex((fila: FilaComponent) => fila.edicionHabilitada);
-    if (indexFilaHabilitada !== -1) {
-      this.filas.toArray()[indexFilaHabilitada].verificarFila();
-      this.botonEnviarHabilitado = false; // Deshabilitar el botón "Enviar" después de enviar la fila
+    if (this.filaActual < this.nivel.opc - 1) {
+      this.filas.toArray()[this.filaActual].verificarFila();
+      this.filaActual++; // Incrementar el índice de la fila actualmente habilitada
+      this.botonEnviarHabilitado = false; 
     }
   }
 
@@ -59,6 +58,4 @@ export class JugarPage implements OnInit {
     this.palabra = this.palabras[rand]
     console.log(this.iteraciones)
   }
-
-
 }
