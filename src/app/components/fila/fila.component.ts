@@ -30,6 +30,7 @@ export class FilaComponent implements OnInit {
     this.edicionHabilitada = false;
     this.verificada = true;
     this.actualizarEstadoBotonVerificar();
+    console.log('Verificando fila...');
   }
 
   actualizarEstadoBotonVerificar() {

@@ -41,10 +41,13 @@ export class JugarPage implements OnInit {
       this.filas.toArray()[this.filaActual].verificarFila();
       this.filaActual++; // Incrementar el índice de la fila actualmente habilitada
       this.botonEnviarHabilitado = false;
+    } else {
+      console.log("¡Última fila alcanzada!");
     }
   }
 
   actualizarEstadoBotonEnviar() {
+    console.log('Fila actual:', this.filaActual);
     this.botonEnviarHabilitado = this.filas.some(
       (fila) => fila.todasCeldasConLetras && !fila.verificada
     );
@@ -59,7 +62,7 @@ export class JugarPage implements OnInit {
       // Marcar que se ha ganado el juego
       this.ganaste = true;
       setTimeout(() => {
-        this.router.navigateByUrl('/nevel');
+        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
       }, 3000);
     }
   }
@@ -77,5 +80,6 @@ export class JugarPage implements OnInit {
     const rand = Math.ceil( Math.random()*this.palabras.length)
     this.palabra = this.palabras[rand]
     console.log(this.iteraciones)
+    localStorage.setItem('jugador', this.jugador);
   }
 }
