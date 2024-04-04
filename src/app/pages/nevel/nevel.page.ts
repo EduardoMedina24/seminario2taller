@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class NevelPage implements OnInit {
   public nivel: number = 0
   jugador: string = '';
+  public audioMuted: boolean = false;
+  @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
   public opciones: any[] =[
     {id: 1, name:'Fácil',color: 'success'},
     {id: 2, name:'Normal',color: 'warning'},
@@ -23,6 +25,7 @@ export class NevelPage implements OnInit {
 
 
   ngOnInit() {
+    
     this.route.queryParams.subscribe(params => {
       this.jugador = params['jugador'];
     });
@@ -34,6 +37,29 @@ export class NevelPage implements OnInit {
 
   onSelectNivel(id: number){
     // console.log(id)
+    if (this.audioPlayer) {
+      this.audioPlayer.nativeElement.pause();
+    }
     this.router.navigate(['jugar',id], { queryParams: { jugador: this.jugador }});
   }
+  ngOnDestroy() {
+    // Detener la reproducción cuando el componente se destruye
+    if (this.audioPlayer) {
+      this.audioPlayer.nativeElement.pause();
+    }
+  }
+  toggleAudio() {
+    this.audioMuted = !this.audioMuted;
+    if (this.audioPlayer) {
+      // Alternar el valor del atributo "muted" en el elemento de audio
+      this.audioPlayer.nativeElement.muted = this.audioMuted;
+    }
+  }
+    ionViewWillEnter() {
+    // Reproducir el audio cada vez que se active la vista
+    if (this.audioPlayer) {
+      this.audioPlayer.nativeElement.play();
+    }
+  }
+  
 }
