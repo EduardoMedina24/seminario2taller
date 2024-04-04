@@ -2,6 +2,8 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilaComponent } from 'src/app/components/fila/fila.component';
 import { ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 
 @Component({
@@ -35,10 +37,12 @@ export class JugarPage implements OnInit {
 
   public palabra: string=''
   public enviado: boolean = false;
+  public audioMuted: boolean = false;
 
   constructor(private route: ActivatedRoute,
     public activedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
     ) { }
 
     enviar() {
@@ -114,4 +118,16 @@ export class JugarPage implements OnInit {
       this.audioPlayer.nativeElement.pause();
     }
   }
+  toggleAudio() {
+    this.audioMuted = !this.audioMuted;
+    if (this.audioPlayer) {
+      // Alternar el valor del atributo "muted" en el elemento de audio
+      this.audioPlayer.nativeElement.muted = this.audioMuted;
+    }
+  }
+  
+  
+  
+  
+  
 }
