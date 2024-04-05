@@ -13,6 +13,7 @@ export class CeldaComponent implements OnInit {
 
   public opcion: string = '';
   public css: string = '';
+  public correcta: boolean = false;
 
   constructor() {}
 
@@ -24,12 +25,14 @@ export class CeldaComponent implements OnInit {
     if (!this.disabled) { // Solo comprobar si la celda no está deshabilitada
       if (this.opcion === this.letra) {
         this.css = 'acierto';
+        this.correcta = true;
       } else {
         if (this.palabra.includes(this.opcion)) {
           this.css = 'casi';
         } else {
           this.css = 'fallo';
         }
+        this.correcta = false;
       }
     }
   }
