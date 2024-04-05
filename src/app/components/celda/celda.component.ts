@@ -21,6 +21,7 @@ export class CeldaComponent implements OnInit {
     return 0;
   }
 
+  //...
   onComprobar() {
     if (!this.disabled) { // Solo comprobar si la celda no está deshabilitada
       if (this.opcion === this.letra) {

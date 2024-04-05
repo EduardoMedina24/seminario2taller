@@ -27,7 +27,7 @@ export class JugarPage implements OnInit {
   public iteraciones: number[] = []
 
   public palabras: string[] =[
-    'daban','panes','dabas','nubes','palmas','cocos','dados','lucio','enanos','metas','zorro','perro','damas','hijos','limones','tigre','limones'
+    'daban','panes','dabas',' dedos', 'nubes','palmas','cocos','dados','lucio','enanos','metas','zorro','perro','damas','hijos','limones','tigre','limones'
   ]
 
   public palabra: string=''

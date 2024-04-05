@@ -18,7 +18,6 @@ export class FilaComponent implements OnInit {
   
   @Output() verificarFilaEvent = new EventEmitter<void>(); // se emite cuando se quiere verificar una fila
   @ViewChildren(CeldaComponent) celdas!: QueryList<CeldaComponent>;
-
   
   constructor() {}
 
@@ -28,7 +27,6 @@ export class FilaComponent implements OnInit {
     this.celdaWidth = `calc(100% / ${this.palabra.length})`;
   }
 
-// En el método verificarFila del componente FilaComponent
 // En el método verificarFila del componente FilaComponent
   verificarFila(): boolean {
     let todasCorrectas = true;
