@@ -6,3 +6,11 @@ ion-content {
     background-attachment: fixed;
     background-size: cover;
 }
+.mensaje-ganaste {
+    background: green;
+    font-size: 30px;
+}
+.mensaje-perdiste {
+    background: red;
+    font-size: 40px;
+}

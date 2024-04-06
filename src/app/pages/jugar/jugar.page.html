@@ -1,4 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nivel: {{nivel.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="small">Nivel: {{nivel.name}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
 <ion-content class="ion-padding">
+ <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
   <p>{{jugador}}</p>
 
   <app-fila *ngFor="let item of iteraciones; let i = index"
@@ -9,6 +24,15 @@
   <ion-button expand="block" (click)="enviar()"
     [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
     <div *ngIf="ganaste" class="mensaje-ganaste">
-      ¡Ganaste! Todas las celdas de la fila actual están en acierto.
+      ¡Ganaste! 
     </div>
+    <div *ngIf="!ganaste && perdiste" class="mensaje-perdiste">
+      ¡Perdiste! 
+    </div>
+
+    
+    <audio #audioPlayer loop autoplay muted>
+      <source src="../../../assets/audio/jmesa1.mp3" type="audio/mpeg">
+    </audio>
+    
 </ion-content>

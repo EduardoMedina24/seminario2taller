@@ -15,13 +15,18 @@ export class InicioPage implements OnInit {
   
    // Navega a la página de selección de dificultad
   irAPaginaDificultad() {
+    localStorage.setItem('jugador', this.jugador);
     this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } });
+    
   }
 
   ngOnInit() {
-    return 0
+    // Obtén el nombre del jugador desde localStorage si existe
+    const jugadorLocalStorage = localStorage.getItem('jugador');
+    if (jugadorLocalStorage !== null) {
+      this.jugador = jugadorLocalStorage;
+    }
   }
-
 
 
 }
