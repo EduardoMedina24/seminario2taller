@@ -1,11 +1,16 @@
 ion-content {
-    --ion-background-color: rgba(0, 0, 0, 0.24);
+    --ion-background-color: rgba(0, 0, 0, 0.534);
     background-image: url("../../../assets/images/palabra1.jpeg");
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
     background-size: cover;
 }
-.ion-padding {
-    background: #0000008e;
+.mensaje-ganaste {
+    background: green;
+    font-size: 30px;
+}
+.mensaje-perdiste {
+    background: red;
+    font-size: 40px;
 }

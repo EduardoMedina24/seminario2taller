@@ -10,7 +10,7 @@
       <ion-title size="small">Hola</ion-title>
     </ion-toolbar>
   </ion-header>
-
+  <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
   <ion-content class="ion-padding">
 
     <div class="divpadding">
@@ -28,5 +28,7 @@
     </div>
 
   </ion-content>
-
+  <audio #audioPlayer loop autoplay muted>
+    <source src="../../../assets/audio/jmesa.mp3" type="audio/mpeg">
+  </audio>
 </ion-content>
