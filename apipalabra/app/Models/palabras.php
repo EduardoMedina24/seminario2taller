@@ -10,4 +10,5 @@ class palabras extends Model
 {
     use HasFactory;
     protected $connection = 'mongodb';
+    public $timestamps = false;
 }
