@@ -16,6 +16,7 @@ export class FilaComponent implements OnInit {
   todasCeldasConLetras: boolean = false;
   @Output() verificarFilaEvent = new EventEmitter<void>();
   @ViewChildren(CeldaComponent) celdas!: QueryList<CeldaComponent>;
+  focusedCellIndex: number = 0;
 
   constructor() {}
 
@@ -36,5 +37,12 @@ export class FilaComponent implements OnInit {
   actualizarEstadoBotonVerificar() {
     this.todasCeldasConLetras = this.celdas.toArray().every(celda => celda.opcion.trim() !== '');
     this.verificarFilaEvent.emit();
+  }
+  focusNextCellIfNecessary(event: any) {
+    // Cambiar al siguiente índice de celda cuando se ingrese una letra
+    const nextIndex = this.celdas.toArray().findIndex(celda => celda.opcion === '');
+    if (nextIndex !== -1 && nextIndex < this.celdas.length - 1) {
+      this.celdas.toArray()[nextIndex + 1].focusNext();
+    }
   }
 }
