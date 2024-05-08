@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-celda',
@@ -13,6 +13,10 @@ export class CeldaComponent implements OnInit {
 
   public opcion: string = '';
   public css: string = '';
+  @ViewChild('nextCellInput') nextCellInput?: ElementRef; // ViewChild para acceder al siguiente input
+
+  @Output() focusNextCell = new EventEmitter<void>(); // Evento para notificar que se debe enfocar la siguiente celda
+
 
   constructor() {}
 
@@ -32,6 +36,19 @@ export class CeldaComponent implements OnInit {
           this.css = 'fallo';
         }
       }
+
+    }
+  }
+  
+  onInput(event: any) {
+    if (event.target.value.length > 0) {
+      this.focusNextCell.emit(); // Emitir evento para enfocar la siguiente celda
+    }
+  }
+
+  focusNext() {
+    if (this.nextCellInput) {
+      this.nextCellInput.nativeElement.focus();
     }
   }
 }
