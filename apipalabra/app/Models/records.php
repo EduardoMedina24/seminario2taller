@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-//use Illuminate\Database\Eloquent\Model;
 use MongoDB\Laravel\Eloquent\Model;
 
-class palabras extends Model
+class records extends Model
 {
     use HasFactory;
+
     protected $connection = 'mongodb';
-    protected $collection = 'palabras';
-    public $timestamps = false;
+    protected $collection = 'records';
+
+    //protected $fillable = [
+   //     'game_id', 'player_id', 'score', 'duration', 'timestamp'
+    //];
 }

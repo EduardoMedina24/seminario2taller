@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('palabras', function (Blueprint $table) {
+        Schema::create('records', function (Blueprint $table) {
             $table->id();
-            $table->string('palabra')->unique();
-            $table->timestamps();
+            $table->string('nombre_jug')->unique();
+            $table->string('nivel_juego')->unique();
+            $table->int('duracion')->unique();
+            $table->timestamps(); 
         });
     }
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('palabras');
+        Schema::dropIfExists('records');
     }
 };
