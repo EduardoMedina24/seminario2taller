@@ -26,6 +26,13 @@ export class FilaComponent implements OnInit {
     this.celdaWidth = `calc(100% / ${this.palabra.length})`;
   }
 
+  ngOnChanges() {
+    console.log(this.palabra)
+    if (this.palabra) {
+      this.letras = this.palabra.split('');
+      this.celdaWidth = `calc(100% / ${this.palabra.length})`;
+    }
+  }
   verificarFila() {
     this.celdas.forEach(celda => celda.onComprobar());
     this.edicionHabilitada = false;

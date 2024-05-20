@@ -94,7 +94,7 @@ return [
         ],
         'mongodb'=> [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI','mongodb://localhost:27017/'),
+            'dsn' => env('DB_URI','mongodb+srv://lvillalba:lvillalba1234@cluster0.knoqdo5.mongodb.net/'),
             'database' => 'descifrarpalabra'
         ]
 
