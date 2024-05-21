@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-celda',
@@ -13,7 +13,6 @@ export class CeldaComponent implements OnInit {
 
   public opcion: string = '';
   public css: string = '';
-  public correcta: boolean = false;
 
   constructor() {}
 
@@ -23,6 +22,7 @@ export class CeldaComponent implements OnInit {
 
   //...
   onComprobar() {
+    console.log('Comprobando celda...')
     if (!this.disabled) { // Solo comprobar si la celda no está deshabilitada
       if (this.opcion === this.letra) {
         this.css = 'acierto';
@@ -35,6 +35,19 @@ export class CeldaComponent implements OnInit {
         }
         this.correcta = false;
       }
+
+    }
+  }
+  
+  onInput(event: any) {
+    if (event.target.value.length > 0) {
+      this.focusNextCell.emit(); // Emitir evento para enfocar la siguiente celda
+    }
+  }
+
+  focusNext() {
+    if (this.nextCellInput) {
+      this.nextCellInput.nativeElement.focus();
     }
   }
 }

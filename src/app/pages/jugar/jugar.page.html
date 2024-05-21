@@ -11,14 +11,28 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content class="ion-padding">
-    <p>{{jugador}}</p>
 
-    <app-fila *ngFor="let item of iteraciones; let i = index"
-      [palabra]="palabra" [enviado]="enviado"
-      (verificarFilaEvent)="actualizarEstadoBotonEnviar()"></app-fila>
-    <ion-button expand="block" (click)="enviar()"
-      [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
+<ion-content class="ion-padding">
+ <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
+  <p>{{jugador}}</p>
 
-  </ion-content>
+  <app-fila *ngFor="let item of iteraciones; let i = index"
+    [palabra]="palabra" [enviado]="enviado"
+    [edicionHabilitada]="i === filaActual" 
+    
+    (verificarFilaEvent)="actualizarEstadoBotonEnviar()"></app-fila>
+  <ion-button expand="block" (click)="enviar()"
+    [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
+    <div *ngIf="ganaste" class="mensaje-ganaste">
+      ¡Ganaste! 
+    </div>
+    <div *ngIf="!ganaste && perdiste" class="mensaje-perdiste">
+      ¡Perdiste! 
+    </div>
+
+    
+    <audio #audioPlayer loop autoplay muted>
+      <source src="../../../assets/audio/jmesa1.mp3" type="audio/mpeg">
+    </audio>
+    
 </ion-content>

@@ -1,7 +1,10 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CeldaComponent } from 'src/app/components/celda/celda.component';
 import { FilaComponent } from 'src/app/components/fila/fila.component';
+import { ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-jugar',
@@ -12,18 +15,18 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
-
   @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;          //Esta anotación se utiliza para obtener una instancia de todos los componentes FilaComponent
-  @ViewChild(CeldaComponent) CeldaComponent!: CeldaComponent;
-  
   public botonEnviarHabilitado: boolean = false;
+  public filaActual: number = 0; // Variable para rastrear la fila actualmente habilitada
+  public ganaste: boolean = false; // Variable para rastrear si el juego se ha ganado
+  public perdiste: boolean = false;
 
   public opciones: any =[
     {id: 1, name:'Fácil',opc: 7,color: 'success'},
     {id: 2, name:'Normal',opc: 5,color: 'warning'},
     {id: 3, name:'Difícil',opc: 2,color: 'danger'},
-
   ]
+
   public iteraciones: number[] = []
 
   public palabras: string[] =[
@@ -33,40 +36,13 @@ export class JugarPage implements OnInit {
   public palabra: string=''
   public enviado: boolean = false;
 
-filaActualIndex = 0;
+
+
   enviar() {
     const indexFilaHabilitada = this.filas.toArray().findIndex((fila: FilaComponent) => fila.edicionHabilitada);
     if (indexFilaHabilitada !== -1) {
       this.filas.toArray()[indexFilaHabilitada].verificarFila();
       this.botonEnviarHabilitado = false; // Deshabilitar el botón "Enviar" después de enviar la fila
-    }
-
-    if (this.filas && this.filas.toArray().length > 0 && this.filaActualIndex < this.filas.toArray().length) {
-      const filaActual = this.filas.toArray()[this.filaActualIndex];
-      this.enviado = true;
-      
-      if (filaActual.verificarFila()) {
-        alert('¡Correcto!'); 
-      } else {
-        this.filaActualIndex++;
-        if (this.filaActualIndex >= this.filas.toArray().length) {
-          alert('Perdiste')
-        }
-      }
-      this.filaActualIndex+1; 
-      if (this.filaActualIndex < this.filas.length) {
-        
-        setTimeout(() => {
-          this.filas.toArray().forEach((fila, index) => fila.edicionHabilitada = false);
-          if (this.filas.toArray()[this.filaActualIndex]){
-            this.filas.toArray()[this.filaActualIndex].edicionHabilitada = true;
-          
-          }
-        })
-      } else {
-        alert('Final del juego');
-      }
-      
     }
   }
 
@@ -74,6 +50,7 @@ filaActualIndex = 0;
     this.botonEnviarHabilitado = this.filas.some(fila => fila.todasCeldasConLetras && !fila.verificada);
   }
   
+
   constructor(private route: ActivatedRoute,
     public activedRoute: ActivatedRoute
     ) { }
@@ -89,16 +66,6 @@ filaActualIndex = 0;
     this.palabra = this.palabras[rand]
     console.log(this.iteraciones)
   }
-  ngAfterViewInit(){
-    this.filas.changes.subscribe((filas: QueryList<FilaComponent>) => {
-      filas.toArray().forEach((fila, index) => fila.edicionHabilitada = index === 0);
-    });
-    setTimeout(() => {
-      this.filas.toArray().forEach((fila, index) => {
-        fila.edicionHabilitada = (index === 0); // Solo la primera fila habilitada
-      });
-      
-    });
-  }
+
 
 }
