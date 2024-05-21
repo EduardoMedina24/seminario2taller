@@ -25,17 +25,30 @@ export class FilaComponent implements OnInit {
     this.celdaWidth = `calc(100% / ${this.palabra.length})`;
   }
 
-// En el método verificarFila del componente FilaComponent
-// En el método verificarFila del componente FilaComponent
-verificarFila() {
-  this.celdas.forEach(celda => celda.onComprobar());
-  this.edicionHabilitada = false;
-  this.verificada = true; // Marcamos la fila como verificada
-  this.actualizarEstadoBotonVerificar();
-}
-actualizarEstadoBotonVerificar() {
-  this.todasCeldasConLetras = this.celdas.toArray().every(celda => celda.opcion.trim() !== '');
-  this.verificarFilaEvent.emit(); // Emitir evento cuando las celdas están listas para ser verificadas
-}
+  ngOnChanges() {
+    console.log(this.palabra)
+    if (this.palabra) {
+      this.letras = this.palabra.split('');
+      this.celdaWidth = `calc(100% / ${this.palabra.length})`;
+    }
+  }
+  verificarFila() {
+    this.celdas.forEach(celda => celda.onComprobar());
+    this.edicionHabilitada = false;
+    this.verificada = true;
+    this.actualizarEstadoBotonVerificar();
+    console.log('Verificando fila...');
+  }
 
+  actualizarEstadoBotonVerificar() {
+    this.todasCeldasConLetras = this.celdas.toArray().every(celda => celda.opcion.trim() !== '');
+    this.verificarFilaEvent.emit();
+  }
+  focusNextCellIfNecessary(event: any) {
+    // Cambiar al siguiente índice de celda cuando se ingrese una letra
+    const nextIndex = this.celdas.toArray().findIndex(celda => celda.opcion === '');
+    if (nextIndex !== -1 && nextIndex < this.celdas.length - 1) {
+      this.celdas.toArray()[nextIndex + 1].focusNext();
+    }
+  }
 }
