@@ -13,13 +13,18 @@ class recodsController extends Controller
         $records = records::all();
         return response()->json(["resul" => $records], Response::HTTP_OK);
     }
-
+    public function getTop5Records()
+    {
+        $records = records::orderBy('duracion', 'asc')->limit(5)->get();
+        return response()->json($records);
+    }
     // Obtener un registro específico
     public function show($id)
     {
         $record = records::find($id);
         return response()->json($record);
     }
+    
 
     //crear
     public function store(Request $request)

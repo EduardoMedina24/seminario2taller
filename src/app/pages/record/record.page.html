@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Records</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let record of records">
+      <ion-label>
+        <h2>Nombre: {{ record.nombre_jug }}</h2>
+        <p>Nvel: {{ record.nivel_juego }} - Tiempo: {{ record.duracion }} segundos</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

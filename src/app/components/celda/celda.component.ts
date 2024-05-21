@@ -13,6 +13,12 @@ export class CeldaComponent implements OnInit {
 
   public opcion: string = '';
   public css: string = '';
+  
+  @ViewChild('nextCellInput') nextCellInput?: ElementRef; // ViewChild para acceder al siguiente input
+
+  @Output() focusNextCell = new EventEmitter<void>(); // Evento para notificar que se debe enfocar la siguiente celda
+
+
 
   constructor() {}
 
@@ -26,14 +32,14 @@ export class CeldaComponent implements OnInit {
     if (!this.disabled) { // Solo comprobar si la celda no está deshabilitada
       if (this.opcion === this.letra) {
         this.css = 'acierto';
-        this.correcta = true;
+        //this.correcta = true;
       } else {
         if (this.palabra.includes(this.opcion)) {
           this.css = 'casi';
         } else {
           this.css = 'fallo';
         }
-        this.correcta = false;
+        //this.correcta = false;
       }
 
     }

@@ -1,5 +1,6 @@
+import { RecordService } from './../../services/record.service';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FilaComponent } from 'src/app/components/fila/fila.component';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -39,7 +40,8 @@ export class JugarPage implements OnInit {
   constructor(private route: ActivatedRoute,
     public activedRoute: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private recordService: RecordService
   ) { }
 
   enviar() {
@@ -51,6 +53,7 @@ export class JugarPage implements OnInit {
         if (!this.filas.toArray()[this.filaActual - 1].celdas.toArray().every(celda => celda.css === 'acierto')) {
           // Si no todas las celdas de la última fila están en acierto, mostrar mensaje de "Perdiste"
           this.perdiste = true;
+          //this.guardarRecord();
           setTimeout(() => {
             this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Redireccionar a la página "nevel" y pasar el jugador como parámetro
           }, 3000);
@@ -62,8 +65,6 @@ export class JugarPage implements OnInit {
       console.log("¡Última fila alcanzada!");
     }
   }
-
-
 
   actualizarEstadoBotonEnviar() {
     console.log('Fila actual:', this.filaActual);
@@ -80,6 +81,7 @@ export class JugarPage implements OnInit {
     ) {
       // Marcar que se ha ganado el juego
       this.ganaste = true;
+      this.guardarRecord();
       setTimeout(() => {
         this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
       }, 3000);
@@ -109,11 +111,49 @@ async ngOnInit() {
       console.log('Palabra agregada:', item.palabra);
     })
     console.log('Palabras:', this.palabras);
+    
     const rand = Math.floor( Math.random()*this.palabras.length)
     this.palabra = this.palabras[rand]
     console.log(this.iteraciones)
     console.log("Palabra aleatoria seleccionada:", this.palabra);
     localStorage.setItem('jugador', this.jugador);
+
+    localStorage.setItem('tiempoInicio', new Date().getTime().toString());
+    
+
+
+    /*llevar datos de records
+    const options1 = {
+      url: 'http://127.0.0.1:8000/api/palabras',
+      //headers: { 'X-Fake-Header': 'Fake-Value' },
+      //data: { foo: 'bar' },
+    };
+    const response1: HttpResponse = await CapacitorHttp.post(options1);*/
+
+  }
+
+  async guardarRecord() {
+    const record = {
+      nombre_jug: this.jugador,
+      nivel_juego: this.nivel.name,
+      duracion: this.calcularDuracion() // calcula la duracion
+    
+    };
+
+    this.recordService.crearRecord(record).subscribe(response => {
+      console.log('Record guardado:', response);
+      this.router.navigate(['/records']); 
+    }, error => {
+      console.error('Error al guardar el record:', error);
+    });
+  }
+  calcularDuracion(): number {
+    const tiempoInicio = localStorage.getItem('tiempoInicio');
+    if (tiempoInicio) {
+      const tiempoFin = new Date().getTime();
+      return (tiempoFin - parseInt(tiempoInicio, 10)) / 1000; // Duración en segundos
+  }
+  return 0;
   }
 
   ngAfterViewInit() {
