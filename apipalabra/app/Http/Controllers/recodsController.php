@@ -11,7 +11,7 @@ class recodsController extends Controller
     public function index()
     {
         $records = records::all();
-        return response()->json([($records), "message"=> "show records"]);
+        return response()->json(["resul" => $records], Response::HTTP_OK);
     }
 
     // Obtener un registro específico
@@ -21,36 +21,42 @@ class recodsController extends Controller
         return response()->json($record);
     }
 
-    /* Crear un nuevo registro
-    public function store(Request $request)
-    {
-        $record = records::create($request->all());
-        return response()->json($record);
-    }*/
+    //crear
     public function store(Request $request)
     {
         $record = new records();
 
-        $record->nombre_jug_1 = $request->nombre_jug_1;
-        $record->nivel_juego_1 = $request->nivel_juego_1;
-
+        $record->nombre_jug = $request->nombre_jug;
+        $record->nivel_juego = $request->nivel_juego;
+        $record->duracion = $request->duracion;
+        
         $record->save(); 
-        return response()->json(['result'=>($record)], Response::HTTP_CREATED);
+
+        return response()->json(['result'=>$record], Response::HTTP_CREATED);
     }
 
-    // Actualizar un registro existente
+    //actualizar
     public function update(Request $request, $id)
     {
         $record = records::find($id);
-        $record->update($request->all());
-        return response()->json($record);
+
+        $record->nombre_jug = $request->nombre_jug;
+        $record->nivel_juego = $request->nivel_juego;
+        $record->duracion = $request->duracion;
+        
+        $record->save(); 
+
+        return response()->json(['result'=>$record], Response::HTTP_OK);
+        
     }
 
-    // Eliminar un registro
+    // Eliminar
     public function destroy($id)
     {
         $record = records::find($id);
         $record->delete();
-        return response()->json('Record deleted successfully');
+        //return response()->json('Record deleted successfully');
+        return response()->json(['messege'=>"Eliminado"], Response::HTTP_OK);
     }
+
 }

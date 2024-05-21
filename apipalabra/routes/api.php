@@ -10,7 +10,7 @@ Route::controller(recodsController::class)->group(function(){
     Route::get('/record/{id}', 'show');
     Route::post('/record', 'store');
     Route::put('/record/{id}', 'update');
-    Route::delete('/records/{id}', 'destroy');
+    Route::delete('/record/{id}', 'destroy');
 });
 
 
