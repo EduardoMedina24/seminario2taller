@@ -11,9 +11,9 @@ return new class extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_jug')->unique();
-            $table->string('nivel_juego')->unique();
-            $table->integer('duracion')->unique();
+            $table->string('nombre_jug');
+            $table->string('nivel_juego');
+            $table->integer('duracione');
             $table->timestamps(); 
         });
     }

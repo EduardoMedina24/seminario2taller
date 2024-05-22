@@ -12,7 +12,4 @@ class records extends Model
     protected $connection = 'mongodb';
     protected $collection = 'records';
 
-    //protected $fillable = [
-   //     'game_id', 'player_id', 'score', 'duration', 'timestamp'
-    //];
 }

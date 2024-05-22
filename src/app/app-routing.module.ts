@@ -21,7 +21,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/nevel/nevel.module').then( m => m.NevelPageModule)
   },
   {
-    path: 'records',
+    path: 'record',
     loadChildren: () => import('./pages/record/record.module').then( m => m.RecordPageModule)
   }
 

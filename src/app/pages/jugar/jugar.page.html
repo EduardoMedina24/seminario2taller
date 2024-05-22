@@ -11,9 +11,8 @@
     </ion-toolbar>
   </ion-header>
 
-
-<ion-content class="ion-padding">
- <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
+  <ion-content class="ion-padding">
+  <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
   <p>{{jugador}}</p>
 
   <app-fila *ngFor="let item of iteraciones; let i = index"
@@ -29,10 +28,9 @@
     <div *ngIf="!ganaste && perdiste" class="mensaje-perdiste">
       ¡Perdiste! 
     </div>
-
     
     <audio #audioPlayer loop autoplay muted>
       <source src="../../../assets/audio/jmesa1.mp3" type="audio/mpeg">
     </audio>
-    
+  </ion-content> 
 </ion-content>

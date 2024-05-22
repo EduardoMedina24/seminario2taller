@@ -78,7 +78,8 @@ export class JugarPage implements OnInit {
       this.filas.toArray()[this.filaActual].celdas.toArray().every(
         (celda) => celda.css === 'acierto'
       )
-    ) {
+    ) 
+    {
       // Marcar que se ha ganado el juego
       this.ganaste = true;
       this.guardarRecord();
@@ -91,7 +92,7 @@ export class JugarPage implements OnInit {
 
 
 
-async ngOnInit() {
+  async ngOnInit() {
     this.route.queryParams.subscribe(params => {
     this.jugador = params['jugador'];
     });
@@ -137,12 +138,9 @@ async ngOnInit() {
       nombre_jug: this.jugador,
       nivel_juego: this.nivel.name,
       duracion: this.calcularDuracion() // calcula la duracion
-    
     };
-
     this.recordService.crearRecord(record).subscribe(response => {
-      console.log('Record guardado:', response);
-      this.router.navigate(['/records']); 
+      console.log('Record guardado:', response); 
     }, error => {
       console.error('Error al guardar el record:', error);
     });
@@ -152,8 +150,8 @@ async ngOnInit() {
     if (tiempoInicio) {
       const tiempoFin = new Date().getTime();
       return (tiempoFin - parseInt(tiempoInicio, 10)) / 1000; // Duración en segundos
-  }
-  return 0;
+    }
+    return 0;
   }
 
   ngAfterViewInit() {
@@ -176,9 +174,5 @@ async ngOnInit() {
       this.audioPlayer.nativeElement.muted = this.audioMuted;
     }
   }
-
-
-
-
 
 }
