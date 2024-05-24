@@ -13,7 +13,7 @@ class PalabraSeeder extends Seeder
      */
     public function run(): void
     {
-        $palabras = ['peras', 'limon', 'cirro', 'hongo', 'datil', 'lince', 'mango', 'papal', 'guasa', 'pinza', 'uvasa', 'flora', 'meson', 'celso', 'cacao', 'cabra', 'chino', 'chivo', 'tarta'];
+        $palabras = [];
 
 
         foreach ($palabras as $palabra) {
