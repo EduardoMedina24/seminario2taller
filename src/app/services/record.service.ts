@@ -17,6 +17,9 @@ export class RecordService {
   obtenerRecordsId(id: number): Observable<any> {
     return this.http.get(`${this.apiUrls}/${id}`);
   }
+  obtenerRecordsTop(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/top`);
+  }
   
   //crear
   crearRecord(record: any): Observable<any> {

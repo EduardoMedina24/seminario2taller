@@ -7,6 +7,7 @@ use App\Http\Controllers\recodsController;
 
 Route::controller(recodsController::class)->group(function(){
     Route::get('/records', 'index');
+    Route::get('/records/top', 'indexId');
     Route::get('/record/{id}', 'show');
     Route::post('/record', 'store');
     Route::put('/record/{id}', 'update');

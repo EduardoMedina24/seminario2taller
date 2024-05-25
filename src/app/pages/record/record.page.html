@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Record</ion-title>
+    <ion-title>Records</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,8 +8,8 @@
   <ion-list>
     <ion-item *ngFor="let record of records">
       <ion-label>
-        <h2>Nombre: {{ record.nombre_jug }}</h2>
-        <p>Nvel: {{ record.nivel_juego }} - Tiempo: {{ record.duracion }} segundos</p>
+        <h2>{{ record.nombre_jug }}</h2>
+        <p>{{ record.nivel_juego }} - {{ record.duracion }} segundos</p>
       </ion-label>
     </ion-item>
   </ion-list>

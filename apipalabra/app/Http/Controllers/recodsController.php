@@ -18,6 +18,11 @@ class recodsController extends Controller{
         return response()->json($record);
     }
     
+    public function indexId() {
+        $records = Records::orderBy('duracion', 'asc')->limit(5)->get(); // Obtener los 5 registros con menor duración
+        return response()->json($records, Response::HTTP_OK);
+    }
+
     public function store(Request $request)
     {
         $record = new records();

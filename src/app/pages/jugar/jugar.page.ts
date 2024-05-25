@@ -83,13 +83,8 @@ export class JugarPage implements OnInit {
       // Marcar que se ha ganado el juego
       this.ganaste = true;
       this.guardarRecord();
-      setTimeout(() => {
-        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
-      }, 3000);
     }
   }
-
-
 
 
   async ngOnInit() {
@@ -109,8 +104,9 @@ export class JugarPage implements OnInit {
     // console.log('response',response.data)
     response.data.forEach((item: any) => {
       this.palabras.push(item.palabra);
-      console.log('Palabra agregada:', item.palabra);
+      //console.log('Palabra agregada:', item.palabra);
     })
+    
     console.log('Palabras:', this.palabras);
     
     const rand = Math.floor( Math.random()*this.palabras.length)
@@ -121,16 +117,6 @@ export class JugarPage implements OnInit {
 
     localStorage.setItem('tiempoInicio', new Date().getTime().toString());
     
-
-
-    /*llevar datos de records
-    const options1 = {
-      url: 'http://127.0.0.1:8000/api/palabras',
-      //headers: { 'X-Fake-Header': 'Fake-Value' },
-      //data: { foo: 'bar' },
-    };
-    const response1: HttpResponse = await CapacitorHttp.post(options1);*/
-
   }
 
   async guardarRecord() {
@@ -140,7 +126,8 @@ export class JugarPage implements OnInit {
       duracion: this.calcularDuracion() // calcula la duracion
     };
     this.recordService.crearRecord(record).subscribe(response => {
-      console.log('Record guardado:', response); 
+      console.log('Record guardado:', response);
+      this.compararDuracion(record.duracion);
     }, error => {
       console.error('Error al guardar el record:', error);
     });
@@ -152,6 +139,28 @@ export class JugarPage implements OnInit {
       return (tiempoFin - parseInt(tiempoInicio, 10)) / 1000; // Duración en segundos
     }
     return 0;
+  }
+  compararDuracion(nuevaDuracion: number) {
+    this.recordService.obtenerRecordsTop().subscribe(records => {
+      if (Array.isArray(records) && records.some(record => record.duracion > nuevaDuracion)) {
+        this.router.navigate(['/record']);
+      } else {
+        alert('Tu duración es mayor que los 5 mejores tiempos. Duración: ' + nuevaDuracion + ' segundos.');
+      }
+      
+      /*const esMenor = records.some((record: any) => nuevaDuracion < record.duracion);
+      if (esMenor) {
+        this.router.navigate(['/record']);
+      } else {
+        alert(`Tu record es: \nJugador: ${this.jugador}\nNivel: ${this.nivel.name}\nDuración: ${nuevaDuracion} segundos`);
+        setTimeout(() => {
+          this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
+        }, 3000);
+      }
+      */
+    }, error => {
+      console.error('Error al obtener los records:', error);
+    });
   }
 
   ngAfterViewInit() {
