@@ -4,7 +4,7 @@ import { FilaComponent } from 'src/app/components/fila/fila.component';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-
+import { Storage } from '@capacitor/storage';
 
 
 @Component({
@@ -25,9 +25,12 @@ export class JugarPage implements OnInit {
   public perdiste: boolean = false;
   public iteraciones: number[] = []
   public palabras: string[] = []
+  public shuffledWords: string[] = [];
   public palabra: string = ''
   public enviado: boolean = false;
   public audioMuted: boolean = false;
+  tiempoTranscurrido: number = 0;
+  cronometro: any;
   public opciones: any = [
     { id: 1, name: 'Fácil', opc: 7, color: 'success' },
     { id: 2, name: 'Normal', opc: 5, color: 'warning' },
@@ -63,6 +66,15 @@ export class JugarPage implements OnInit {
     }
   }
 
+  iniciarCronometro() {
+    this.cronometro = setInterval(() => {
+      this.tiempoTranscurrido++;
+    }, 1000); // Incrementar el tiempo cada segundo
+  }
+
+  detenerCronometro() {
+    clearInterval(this.cronometro);
+  }
 
 
   actualizarEstadoBotonEnviar() {
@@ -77,12 +89,44 @@ export class JugarPage implements OnInit {
       this.filas.toArray()[this.filaActual].celdas.toArray().every(
         (celda) => celda.css === 'acierto'
       )
-    ) {
-      // Marcar que se ha ganado el juego
+    ) { this.detenerCronometro();
       this.ganaste = true;
+      this.enviarRegistroGanador(); // Llama a la función para enviar el registro ganador
       setTimeout(() => {
-        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
+        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } });
       }, 3000);
+    }
+  }
+  async enviarRegistroGanador() {
+    try {
+      const { value: usuarioId } = await Storage.get({ key: 'usuarioId' });
+      
+      // Check if usuarioId is retrieved successfully
+      if (!usuarioId) {
+        console.error('No se pudo obtener el ID del usuario');
+        return;
+      }
+
+      const data = {
+        palabra: this.palabra,
+        dificultad: this.nivel.name,
+        tiempo: this.tiempoTranscurrido,
+        user_id: usuarioId // Incluir el ID del usuario
+      };
+
+      CapacitorHttp.post({
+        url: 'http://127.0.0.1:8000/api/record',
+        data: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(response => {
+        console.log('Registro guardado con éxito:', response);
+      }).catch(error => {
+        console.error('Error al guardar el registro:', error);
+      });
+    } catch (error) {
+      console.error('Error al obtener el ID del usuario:', error);
     }
   }
 
@@ -108,12 +152,22 @@ async ngOnInit() {
       this.palabras.push(item.palabra);
       console.log('Palabra agregada:', item.palabra);
     })
-    console.log('Palabras:', this.palabras);
-    const rand = Math.floor( Math.random()*this.palabras.length)
-    this.palabra = this.palabras[rand]
+    if (!this.shuffledWords || this.shuffledWords.length === 0) {
+      this.shuffledWords = [...this.palabras].sort(() => 0.5 - Math.random());
+  }
+  
+  console.log('Palabras barajadas:', this.shuffledWords);
+  this.palabra = this.shuffledWords.pop() ?? ''; 
+  console.log('Palabra seleccionada:', this.palabra);
+  
+  if (this.shuffledWords.length === 0) {
+      console.log('No hay más palabras para seleccionar.');
+  }
+  
     console.log(this.iteraciones)
     console.log("Palabra aleatoria seleccionada:", this.palabra);
     localStorage.setItem('jugador', this.jugador);
+    this.iniciarCronometro();
   }
 
   ngAfterViewInit() {
@@ -128,6 +182,7 @@ async ngOnInit() {
     if (this.audioPlayer) {
       this.audioPlayer.nativeElement.pause();
     }
+    this.detenerCronometro();
   }
   toggleAudio() {
     this.audioMuted = !this.audioMuted;

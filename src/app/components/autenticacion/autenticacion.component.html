@@ -1,0 +1,23 @@
+<form (ngSubmit)="register()">
+  <ion-input class="nombre" label="Nombre" labelPlacement="stacked" [(ngModel)]="nombre" name="nombre" placeholder="Digite su Nombre"></ion-input>
+  <ion-input class="email" type="email" label="Email" labelPlacement="stacked" [(ngModel)]="email" name="email" placeholder="Digite su Email"></ion-input>
+  <ion-input class="contrasena" type="password" label="Contraseña" labelPlacement="stacked" [(ngModel)]="contrasena" name="contrasena" placeholder="Digite su Contraseña"></ion-input>
+
+  <div class="boton-centrado">
+    <button type="submit" class="boton-registrar" >
+      Registrar
+    </button>
+  </div>
+
+  <!-- Mostrar mensaje de registro exitoso -->
+  <div *ngIf="registroExitoso" class="mensaje-exitoso">
+    Tu registro ha sido exitoso
+  </div>
+
+  
+  <!-- Mostrar mensaje de error -->
+  <div *ngIf="mensajeError" class="mensaje-error">
+    {{ mensajeError }}
+  </div>
+  
+</form>
