@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Podio;
 use Illuminate\Http\Request;
-use App\Models\Record;
 
-class RecordsController extends Controller
+class PodioController extends Controller
 {
     public function index()
     {
-        return response()->json(Record::all());
+        return response()->json(Podio::all());
     }
 
     public function store(Request $request)
     {
-        $record = Record::create($request->all());
-        return response()->json($record, 201);
+        $podio = Podio::create($request->all());
+        return response()->json($podio, 201);
     }
 
     public function show($id)
     {
-        $record = Record::find($id);
-        if ($record) {
-            return response()->json($record);
+        $podio = Podio::find($id);
+        if ($podio) {
+            return response()->json($podio);
         } else {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
@@ -30,10 +30,10 @@ class RecordsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $record = Record::find($id);
-        if ($record) {
-            $record->update($request->all());
-            return response()->json($record);
+        $podio = Podio::find($id);
+        if ($podio) {
+            $podio->update($request->all());
+            return response()->json($podio);
         } else {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
@@ -41,13 +41,12 @@ class RecordsController extends Controller
 
     public function destroy($id)
     {
-        $record = Record::find($id);
-        if ($record) {
-            $record->delete();
+        $podio = Podio::find($id);
+        if ($podio) {
+            $podio->delete();
             return response()->json(['message' => 'Registro eliminado']);
         } else {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
     }
-
 }

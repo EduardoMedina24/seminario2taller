@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 //use Illuminate\Database\Eloquent\Model;
 use MongoDB\Laravel\Eloquent\Model;
 
-class Record extends Model
+
+class Podio extends Model
 {
     use HasFactory;
 

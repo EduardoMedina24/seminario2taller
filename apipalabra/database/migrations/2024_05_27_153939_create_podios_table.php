@@ -6,21 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+/**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('records', function (Blueprint $table) {
+        Schema::create('podios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('palabra_id')->constrained(); // Suponiendo que 'palabra_id' es una clave foránea
-            $table->string('dificultad');
+            $table->string('name');
+            $table->string('email');
             $table->integer('tiempo');
-            $table->foreignId('user_id')->constrained(); // Suponiendo que 'user_id' es una clave foránea
+            $table->string('palabra');
+            $table->string('dificultad');
             $table->timestamps();
         });
+     
     }
 
     /**
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('records');
+        Schema::dropIfExists('podios');
     }
 };

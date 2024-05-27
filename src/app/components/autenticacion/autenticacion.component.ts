@@ -22,26 +22,22 @@ export class AutenticacionComponent  implements OnInit {
   }
 
   async register() {
-    // Enviar datos al backend Laravel
     this.http.post('http://127.0.0.1:8000/api/usuario', { name: this.nombre, email: this.email, password: this.contrasena })
       .subscribe(async (response: any) => {
         console.log('Usuario registrado:', response);
-        // Marcar el registro como exitoso y cerrar la ventana flotante
         this.registroExitoso = true;
-        await Storage.set({ key: 'usuarioId', value: response._id }); // Guardar el ID del usuario en Capacitor Storage
+        await Storage.set({ key: 'usuarioNombre', value: this.nombre });
+        await Storage.set({ key: 'usuarioEmail', value: this.email });
         setTimeout(() => {
-          this.modalController.dismiss({ nombre: this.nombre }); // Cierra la ventana flotante
+          this.modalController.dismiss({ nombre: this.nombre });
         }, 3000);
       },
       error => {
-        // Manejar el error de correo duplicado
         if (error.status === 500) {
           this.mensajeError = 'El correo ya está registrado.';
         } else {
           this.mensajeError = 'Ocurrió un error. Inténtalo de nuevo.';
         }
-      
-        // Limpiar el mensaje de error después de 2 segundos
         setTimeout(() => {
           this.mensajeError = '';
         }, 2000);

@@ -99,19 +99,20 @@ export class JugarPage implements OnInit {
   }
   async enviarRegistroGanador() {
     try {
-      const { value: usuarioId } = await Storage.get({ key: 'usuarioId' });
-      
-      // Check if usuarioId is retrieved successfully
-      if (!usuarioId) {
-        console.error('No se pudo obtener el ID del usuario');
+      const { value: usuarioEmail } = await Storage.get({ key: 'usuarioEmail' });
+      const { value: usuarioNombre } = await Storage.get({ key: 'usuarioNombre' });
+
+      if (!usuarioEmail || !usuarioNombre) {
+        console.error('No se pudo obtener el nombre o el correo electrónico del usuario');
         return;
       }
 
       const data = {
+        name: usuarioNombre,
+        email: usuarioEmail,
         palabra: this.palabra,
         dificultad: this.nivel.name,
         tiempo: this.tiempoTranscurrido,
-        user_id: usuarioId // Incluir el ID del usuario
       };
 
       CapacitorHttp.post({
@@ -126,9 +127,10 @@ export class JugarPage implements OnInit {
         console.error('Error al guardar el registro:', error);
       });
     } catch (error) {
-      console.error('Error al obtener el ID del usuario:', error);
+      console.error('Error al obtener el nombre o el correo electrónico del usuario:', error);
     }
   }
+
 
 
 

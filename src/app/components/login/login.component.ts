@@ -24,12 +24,14 @@ export class LoginComponent  implements OnInit {
     this.http.post('http://127.0.0.1:8000/api/login', { email: this.email, password: this.password })
       .subscribe(async (response: any) => {
         console.log('Usuario autenticado:', response);
-        await Storage.set({ key: 'usuarioId', value: response.user.id }); // Guardar el ID del usuario en Capacitor Storage
-        
+      
+        await Storage.set({ key: 'usuarioEmail', value: response.user.email }); // Guardar el correo electrónico del usuario
+        await Storage.set({ key: 'usuarioNombre', value: response.user.name }); // Guardar el nombre del usuario
+  
         setTimeout(() => {
           this.modalController.dismiss({ nombre: response.user.name }); // Cerrar el modal y pasar el nombre del usuario
         }, 2000);
-        
+  
         this.router.navigate(['/inicio']); // Redirigir al usuario a la página del dashboard
       }, error => {
         this.mensajeError = 'Credenciales inválidas';
@@ -39,4 +41,5 @@ export class LoginComponent  implements OnInit {
         }, 2000);
       });
   }
+  
 }
