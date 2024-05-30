@@ -1,15 +1,26 @@
-<form (ngSubmit)="login()">
-  <ion-input type="email" label="Email" labelPlacement="stacked" [(ngModel)]="email" name="email" placeholder="Digite su Email"></ion-input>
-  <ion-input type="password" label="Contraseña" labelPlacement="stacked" [(ngModel)]="password" name="password" placeholder="Digite su Contraseña"></ion-input>
+<ion-content>
+  <button (click)="redirectToNewPage()" class="icon-button ion-float-right">
+    <ion-icon name="close-sharp"></ion-icon>
+  </button>
 
-  <div class="boton-centrado">
+  <form (ngSubmit)="login()" class="login-form">
+  <div class="form-group">
+    <ion-input type="email" label="Email" labelPlacement="stacked" [(ngModel)]="email" name="email" placeholder="Digite su Email"></ion-input>
+  </div>
+  <div class="form-group">
+    <ion-input type="password" label="Contraseña" labelPlacement="stacked" [(ngModel)]="password" name="password" placeholder="Digite su Contraseña"></ion-input>
+  </div>
+  <div class="form-group boton-centrado">
     <button type="submit" class="boton-login">
       Iniciar Sesión
     </button>
   </div>
-
   <!-- Mostrar mensaje de error -->
   <div *ngIf="mensajeError" class="mensaje-error">
     {{ mensajeError }}
   </div>
 </form>
+</ion-content>
+
+
+

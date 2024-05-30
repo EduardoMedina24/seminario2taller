@@ -6,7 +6,11 @@ import { ChangeDetectorRef } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { Storage } from '@capacitor/storage';
 
-
+interface UsuarioConTiempo {
+  name: string;
+  tiempo: number;
+  email: string; // Añade esta propiedad
+}
 @Component({
   selector: 'app-jugar',
   templateUrl: './jugar.page.html',
@@ -17,6 +21,7 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
+  public usuariosConTiempos: any[] = []; // Definición de la propiedad
   @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;
   @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
   public botonEnviarHabilitado: boolean = false;
@@ -26,9 +31,12 @@ export class JugarPage implements OnInit {
   public iteraciones: number[] = []
   public palabras: string[] = []
   public shuffledWords: string[] = [];
+  mostrarUsuarios: boolean = false;
   public palabra: string = ''
   public enviado: boolean = false;
   public audioMuted: boolean = false;
+  public mostrarFilas: boolean = false;
+ 
   tiempoTranscurrido: number = 0;
   cronometro: any;
   public opciones: any = [
@@ -90,11 +98,14 @@ export class JugarPage implements OnInit {
         (celda) => celda.css === 'acierto'
       )
     ) { this.detenerCronometro();
-      this.ganaste = true;
+      
+      setTimeout(() => {
+        this.ganaste = true;
+      }, 2000);
       this.enviarRegistroGanador(); // Llama a la función para enviar el registro ganador
       setTimeout(() => {
         this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } });
-      }, 3000);
+      }, 5000);
     }
   }
   async enviarRegistroGanador() {
@@ -169,7 +180,8 @@ async ngOnInit() {
     console.log(this.iteraciones)
     console.log("Palabra aleatoria seleccionada:", this.palabra);
     localStorage.setItem('jugador', this.jugador);
-    this.iniciarCronometro();
+    
+    await this.obtenerUsuariosConTiempos()
   }
 
   ngAfterViewInit() {
@@ -196,6 +208,55 @@ async ngOnInit() {
 
 
 
+ 
+  async obtenerUsuariosConTiempos() {
+    try {
+      // Lógica para obtener los usuarios y tiempos de la API
+      const response = await CapacitorHttp.get({
+        url: `http://127.0.0.1:8000/api/record?dificultad=${this.nivel.name}`,
+      });
+  
+      if (response.data && response.data.length > 0) {
+        // Filtrar los usuarios por dificultad
+        const usuariosFiltrados = response.data.filter((usuario: any) => usuario.dificultad === this.nivel.name);
+  
+        // Eliminar usuarios duplicados basados en su email
+        const uniqueUsuarios = this.eliminarUsuariosDuplicados(usuariosFiltrados);
+  
+        // Ordenar los usuarios filtrados por tiempo de forma ascendente
+        this.usuariosConTiempos = uniqueUsuarios.sort((a: UsuarioConTiempo, b: UsuarioConTiempo) => a.tiempo - b.tiempo);
+      }
+    } catch (error) {
+      console.error('Error al obtener los usuarios y tiempos:', error);
+    }
+  }
+  
+  eliminarUsuariosDuplicados(usuarios: UsuarioConTiempo[]): UsuarioConTiempo[] {
+    const uniqueUsuarios: { [key: string]: UsuarioConTiempo } = {};
+    usuarios.forEach((usuario) => {
+      if (!uniqueUsuarios[usuario.email] || usuario.tiempo < uniqueUsuarios[usuario.email].tiempo) {
+        uniqueUsuarios[usuario.email] = usuario;
+      }
+    });
+    return Object.values(uniqueUsuarios);
+  }
+  
+  
 
-
+  mostrarFormularioUsuarios() {
+    this.mostrarUsuarios = !this.mostrarUsuarios;
+  }
+  
+  iniciarJuego() {
+    this.mostrarFilas = true;
+    this.iniciarCronometro();
+  }
+  getFormattedTime(): string {
+    const minutes: number = Math.floor(this.tiempoTranscurrido / 60);
+    const seconds: number = this.tiempoTranscurrido % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+  redirectToNewPage() {
+    this.router.navigate(['/nevel']);
+  }
 }

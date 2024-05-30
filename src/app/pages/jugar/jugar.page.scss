@@ -14,3 +14,28 @@ ion-content {
     background: red;
     font-size: 40px;
 }
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.cronometro {
+    margin-left: 10px; /* Ajustar el espaciado según sea necesario */
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.icon-button {
+    font-size: 18px; /* Tamaño del icono */
+    width: 28px; /* Ancho del botón */
+    height: 28px; /* Altura del botón */
+    border-radius: 50%; /* Para hacer el botón circular */
+    background-color: #ffffff; /* Color de fondo */
+    border: 2px solid #000000; /* Borde */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    color: #000000; /* Color del icono */
+}
+
+.icon-button:hover {
+    background-color: #e00e0e; /* Cambiar el color de fondo al pasar el ratón */
+}

@@ -43,5 +43,8 @@ export class AutenticacionComponent  implements OnInit {
         }, 2000);
       });
   }
-
+  redirectToNewPage() {
+    console.log('Cerrando el modal...');
+    this.modalController.dismiss();
+  }
 }

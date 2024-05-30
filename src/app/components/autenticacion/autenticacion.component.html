@@ -1,4 +1,11 @@
-<form (ngSubmit)="register()">
+<ion-content>
+
+  <button (click)="redirectToNewPage()" class="icon-button">
+    <ion-icon name="close-sharp"></ion-icon>
+  </button>
+
+
+  <form (ngSubmit)="register()">
   <ion-input class="nombre" label="Nombre" labelPlacement="stacked" [(ngModel)]="nombre" name="nombre" placeholder="Digite su Nombre"></ion-input>
   <ion-input class="email" type="email" label="Email" labelPlacement="stacked" [(ngModel)]="email" name="email" placeholder="Digite su Email"></ion-input>
   <ion-input class="contrasena" type="password" label="Contraseña" labelPlacement="stacked" [(ngModel)]="contrasena" name="contrasena" placeholder="Digite su Contraseña"></ion-input>
@@ -19,5 +26,8 @@
   <div *ngIf="mensajeError" class="mensaje-error">
     {{ mensajeError }}
   </div>
-  
+
 </form>
+</ion-content>
+
+

@@ -1,6 +1,15 @@
 <ion-header [translucent]="true">
+
+  <button (click)="redirectToNewPage()" class="icon-button">
+    <ion-icon name="close-sharp"></ion-icon>
+  </button>
+  
   <ion-toolbar>
+ 
     <ion-title>Nivel: {{nivel.name}}</ion-title>
+    <ion-button slot="end" (click)="mostrarFormularioUsuarios()">
+      Podio
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -12,17 +21,25 @@
   </ion-header>
 
 
-<ion-content class="ion-padding">
- <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
+  <div class="header-container">
+    <ion-icon name="volume-mute-outline" (click)="toggleAudio()" [style.color]="audioMuted ? 'red' : 'initial'"></ion-icon>
+    <div class="cronometro">
+      Tiempo: {{ getFormattedTime() }}
+    </div>
+  </div>
   <p>{{jugador}}</p>
 
-  <app-fila *ngFor="let item of iteraciones; let i = index"
-    [palabra]="palabra" [enviado]="enviado"
-    [edicionHabilitada]="i === filaActual" 
+  <ion-button expand="block" (click)="iniciarJuego()" *ngIf="!mostrarFilas">Iniciar Juego</ion-button>
+
+  <div *ngIf="mostrarFilas">
+    <app-fila *ngFor="let item of iteraciones; let i = index"
+      [palabra]="palabra" [enviado]="enviado"
+      [edicionHabilitada]="i === filaActual" 
+      (verificarFilaEvent)="actualizarEstadoBotonEnviar()"></app-fila>
     
-    (verificarFilaEvent)="actualizarEstadoBotonEnviar()"></app-fila>
-  <ion-button expand="block" (click)="enviar()"
-    [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
+    <ion-button expand="block" (click)="enviar()"
+      [disabled]="!botonEnviarHabilitado">Enviar</ion-button>
+  </div>
     <div *ngIf="ganaste" class="mensaje-ganaste">
       ¡Ganaste! 
     </div>
@@ -34,5 +51,21 @@
     <audio #audioPlayer loop autoplay muted>
       <source src="../../../assets/audio/jmesa1.mp3" type="audio/mpeg">
     </audio>
+    <ion-card *ngIf="mostrarUsuarios">
+      <ion-card-header>
+        <ion-card-title>Lista de Usuarios y Tiempos</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-list *ngIf="usuariosConTiempos.length > 0">
+          <ion-item *ngFor="let usuario of usuariosConTiempos.slice(0, 5)">
+            <ion-label>{{ usuario.name }}</ion-label>
+            <ion-label>{{ usuario.tiempo }} segundos</ion-label>
+          </ion-item>
+        </ion-list>
+    
+        <ion-label *ngIf="usuariosConTiempos.length === 0">No hay usuarios con tiempos registrados.</ion-label>
+      </ion-card-content>
+    </ion-card>
     
 </ion-content>
