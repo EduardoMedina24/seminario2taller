@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 import { Storage } from '@capacitor/storage';
 import { ModalController } from '@ionic/angular';
 @Component({
@@ -25,8 +26,8 @@ export class LoginComponent  implements OnInit {
       .subscribe(async (response: any) => {
         console.log('Usuario autenticado:', response);
       
-        await Storage.set({ key: 'usuarioEmail', value: response.user.email }); // Guardar el correo electrónico del usuario
-        await Storage.set({ key: 'usuarioNombre', value: response.user.name }); // Guardar el nombre del usuario
+        await Preferences.set({ key: 'usuarioEmail', value: response.user.email }); // Guardar el correo electrónico del usuario
+        await Preferences.set({ key: 'usuarioNombre', value: response.user.name }); // Guardar el nombre del usuario
   
         setTimeout(() => {
           this.modalController.dismiss({ nombre: response.user.name }); // Cerrar el modal y pasar el nombre del usuario

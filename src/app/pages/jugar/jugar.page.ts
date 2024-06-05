@@ -5,11 +5,12 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 
 interface UsuarioConTiempo {
   name: string;
   tiempo: number;
-  email: string; // Añade esta propiedad
+  email: string; 
 }
 @Component({
   selector: 'app-jugar',
@@ -21,7 +22,7 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
-  public usuariosConTiempos: any[] = []; // Definición de la propiedad
+  public usuariosConTiempos: any[] = []; 
   @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;
   @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
   public botonEnviarHabilitado: boolean = false;
@@ -60,7 +61,7 @@ export class JugarPage implements OnInit {
       // Verificar si es la última fila para activar el botón de enviar
       if (this.filaActual === this.nivel.opc) {
         if (!this.filas.toArray()[this.filaActual - 1].celdas.toArray().every(celda => celda.css === 'acierto')) {
-          // Si no todas las celdas de la última fila están en acierto, mostrar mensaje de "Perdiste"
+          // Si  todas las celdas de la última fila no están en acierto muestra mensaje de "Perdiste"
           this.perdiste = true;
           setTimeout(() => {
             this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Redireccionar a la página "nevel" y pasar el jugador como parámetro
@@ -91,7 +92,7 @@ export class JugarPage implements OnInit {
       (fila) => fila.todasCeldasConLetras && !fila.verificada
     );
 
-    // Verificar si todas las celdas de la fila actual están en acierto
+    // Verifica si todas las celdas de la fila actual están en acierto
     if (
       this.filas.toArray()[this.filaActual].verificada &&
       this.filas.toArray()[this.filaActual].celdas.toArray().every(
@@ -110,8 +111,8 @@ export class JugarPage implements OnInit {
   }
   async enviarRegistroGanador() {
     try {
-      const { value: usuarioEmail } = await Storage.get({ key: 'usuarioEmail' });
-      const { value: usuarioNombre } = await Storage.get({ key: 'usuarioNombre' });
+      const { value: usuarioEmail } = await Preferences.get({ key: 'usuarioEmail' });
+      const { value: usuarioNombre } = await Preferences.get({ key: 'usuarioNombre' });
 
       if (!usuarioEmail || !usuarioNombre) {
         console.error('No se pudo obtener el nombre o el correo electrónico del usuario');
@@ -163,15 +164,15 @@ async ngOnInit() {
     // console.log('response',response.data)
     response.data.forEach((item: any) => {
       this.palabras.push(item.palabra);
-      console.log('Palabra agregada:', item.palabra);
+      // console.log('Palabra agregada:', item.palabra);
     })
     if (!this.shuffledWords || this.shuffledWords.length === 0) {
       this.shuffledWords = [...this.palabras].sort(() => 0.5 - Math.random());
   }
   
-  console.log('Palabras barajadas:', this.shuffledWords);
+  // console.log('Palabras barajadas:', this.shuffledWords);
   this.palabra = this.shuffledWords.pop() ?? ''; 
-  console.log('Palabra seleccionada:', this.palabra);
+  // console.log('Palabra seleccionada:', this.palabra);
   
   if (this.shuffledWords.length === 0) {
       console.log('No hay más palabras para seleccionar.');
@@ -211,7 +212,7 @@ async ngOnInit() {
  
   async obtenerUsuariosConTiempos() {
     try {
-      // Lógica para obtener los usuarios y tiempos de la API
+      // Lógica para obtener los usuarios y tiempos 
       const response = await CapacitorHttp.get({
         url: `http://127.0.0.1:8000/api/record?dificultad=${this.nivel.name}`,
       });
