@@ -4,9 +4,13 @@ import { FilaComponent } from 'src/app/components/fila/fila.component';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 
-
-
+interface UsuarioConTiempo {
+  name: string;
+  tiempo: number;
+  email: string; // Añade esta propiedad
+}
 @Component({
   selector: 'app-jugar',
   templateUrl: './jugar.page.html',
@@ -17,6 +21,7 @@ export class JugarPage implements OnInit {
   jugador: string = '';
   id: number = 0
   public nivel: any
+  public usuariosConTiempos: any[] = []; // Definición de la propiedad
   @ViewChildren(FilaComponent) filas!: QueryList<FilaComponent>;
   @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
   public botonEnviarHabilitado: boolean = false;
@@ -25,9 +30,15 @@ export class JugarPage implements OnInit {
   public perdiste: boolean = false;
   public iteraciones: number[] = []
   public palabras: string[] = []
+  public shuffledWords: string[] = [];
+  mostrarUsuarios: boolean = false;
   public palabra: string = ''
   public enviado: boolean = false;
   public audioMuted: boolean = false;
+  public mostrarFilas: boolean = false;
+ 
+  tiempoTranscurrido: number = 0;
+  cronometro: any;
   public opciones: any = [
     { id: 1, name: 'Fácil', opc: 7, color: 'success' },
     { id: 2, name: 'Normal', opc: 5, color: 'warning' },
@@ -63,6 +74,15 @@ export class JugarPage implements OnInit {
     }
   }
 
+  iniciarCronometro() {
+    this.cronometro = setInterval(() => {
+      this.tiempoTranscurrido++;
+    }, 1000); // Incrementar el tiempo cada segundo
+  }
+
+  detenerCronometro() {
+    clearInterval(this.cronometro);
+  }
 
 
   actualizarEstadoBotonEnviar() {
@@ -77,14 +97,51 @@ export class JugarPage implements OnInit {
       this.filas.toArray()[this.filaActual].celdas.toArray().every(
         (celda) => celda.css === 'acierto'
       )
-    ) {
-      // Marcar que se ha ganado el juego
-      this.ganaste = true;
+    ) { this.detenerCronometro();
+      
       setTimeout(() => {
-        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } }); // Navega a la página "nevel" y pasa el jugador como parámetro
-      }, 3000);
+        this.ganaste = true;
+      }, 2000);
+      this.enviarRegistroGanador(); // Llama a la función para enviar el registro ganador
+      setTimeout(() => {
+        this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } });
+      }, 5000);
     }
   }
+  async enviarRegistroGanador() {
+    try {
+      const { value: usuarioEmail } = await Storage.get({ key: 'usuarioEmail' });
+      const { value: usuarioNombre } = await Storage.get({ key: 'usuarioNombre' });
+
+      if (!usuarioEmail || !usuarioNombre) {
+        console.error('No se pudo obtener el nombre o el correo electrónico del usuario');
+        return;
+      }
+
+      const data = {
+        name: usuarioNombre,
+        email: usuarioEmail,
+        palabra: this.palabra,
+        dificultad: this.nivel.name,
+        tiempo: this.tiempoTranscurrido,
+      };
+
+      CapacitorHttp.post({
+        url: 'http://127.0.0.1:8000/api/record',
+        data: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(response => {
+        console.log('Registro guardado con éxito:', response);
+      }).catch(error => {
+        console.error('Error al guardar el registro:', error);
+      });
+    } catch (error) {
+      console.error('Error al obtener el nombre o el correo electrónico del usuario:', error);
+    }
+  }
+
 
 
 
@@ -108,12 +165,23 @@ async ngOnInit() {
       this.palabras.push(item.palabra);
       console.log('Palabra agregada:', item.palabra);
     })
-    console.log('Palabras:', this.palabras);
-    const rand = Math.floor( Math.random()*this.palabras.length)
-    this.palabra = this.palabras[rand]
+    if (!this.shuffledWords || this.shuffledWords.length === 0) {
+      this.shuffledWords = [...this.palabras].sort(() => 0.5 - Math.random());
+  }
+  
+  console.log('Palabras barajadas:', this.shuffledWords);
+  this.palabra = this.shuffledWords.pop() ?? ''; 
+  console.log('Palabra seleccionada:', this.palabra);
+  
+  if (this.shuffledWords.length === 0) {
+      console.log('No hay más palabras para seleccionar.');
+  }
+  
     console.log(this.iteraciones)
     console.log("Palabra aleatoria seleccionada:", this.palabra);
     localStorage.setItem('jugador', this.jugador);
+    
+    await this.obtenerUsuariosConTiempos()
   }
 
   ngAfterViewInit() {
@@ -128,6 +196,7 @@ async ngOnInit() {
     if (this.audioPlayer) {
       this.audioPlayer.nativeElement.pause();
     }
+    this.detenerCronometro();
   }
   toggleAudio() {
     this.audioMuted = !this.audioMuted;
@@ -139,6 +208,55 @@ async ngOnInit() {
 
 
 
+ 
+  async obtenerUsuariosConTiempos() {
+    try {
+      // Lógica para obtener los usuarios y tiempos de la API
+      const response = await CapacitorHttp.get({
+        url: `http://127.0.0.1:8000/api/record?dificultad=${this.nivel.name}`,
+      });
+  
+      if (response.data && response.data.length > 0) {
+        // Filtrar los usuarios por dificultad
+        const usuariosFiltrados = response.data.filter((usuario: any) => usuario.dificultad === this.nivel.name);
+  
+        // Eliminar usuarios duplicados basados en su email
+        const uniqueUsuarios = this.eliminarUsuariosDuplicados(usuariosFiltrados);
+  
+        // Ordenar los usuarios filtrados por tiempo de forma ascendente
+        this.usuariosConTiempos = uniqueUsuarios.sort((a: UsuarioConTiempo, b: UsuarioConTiempo) => a.tiempo - b.tiempo);
+      }
+    } catch (error) {
+      console.error('Error al obtener los usuarios y tiempos:', error);
+    }
+  }
+  
+  eliminarUsuariosDuplicados(usuarios: UsuarioConTiempo[]): UsuarioConTiempo[] {
+    const uniqueUsuarios: { [key: string]: UsuarioConTiempo } = {};
+    usuarios.forEach((usuario) => {
+      if (!uniqueUsuarios[usuario.email] || usuario.tiempo < uniqueUsuarios[usuario.email].tiempo) {
+        uniqueUsuarios[usuario.email] = usuario;
+      }
+    });
+    return Object.values(uniqueUsuarios);
+  }
+  
+  
 
-
+  mostrarFormularioUsuarios() {
+    this.mostrarUsuarios = !this.mostrarUsuarios;
+  }
+  
+  iniciarJuego() {
+    this.mostrarFilas = true;
+    this.iniciarCronometro();
+  }
+  getFormattedTime(): string {
+    const minutes: number = Math.floor(this.tiempoTranscurrido / 60);
+    const seconds: number = this.tiempoTranscurrido % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+  redirectToNewPage() {
+    this.router.navigate(['/nevel']);
+  }
 }

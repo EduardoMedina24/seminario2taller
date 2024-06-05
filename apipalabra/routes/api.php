@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PalabrasController;
-
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RecordsController;
+use App\Http\Controllers\PodioController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,3 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('palabras', PalabrasController::class);
+Route::apiResource('usuario', UsuarioController::class);
+Route::apiResource('podio', PodioController::class);
+Route::post('sendDifficulty', [PalabrasController::class, 'sendDifficulty']);
+Route::apiResource('record', RecordsController::class);
+Route::post('login', [UsuarioController::class, 'login']);

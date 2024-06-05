@@ -1,0 +1,84 @@
+ion-content {
+    --ion-background-color: rgba(0, 0, 0, 0.705);
+    background-image: url("../../../assets/images/palabra1.jpeg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+// Estilos generales del formulario
+form {
+    max-width: 100%; // Ajusta el ancho máximo según tus preferencias
+    margin: 50px auto;
+    padding: 50px; // Aumenta el padding para que el formulario se vea más grande
+    border-radius: 20px; // Esquinas más redondeadas
+    background-color: #000000d0; // Fondo negro
+    box-shadow: 0 4px 8px rgba(241, 8, 8, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+
+  // Estilos para los inputs
+ion-input {
+    width: 100%;
+    margin-bottom: 20px;
+    ion-label {
+    font-weight: bold;
+      color: #333333; // Color del texto del label
+    }
+    input {
+      border: 1px solid #d80202; // Borde gris claro
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 30px;
+    &:focus {
+        outline: none;
+        border-color: #007bff; // Borde azul al tener foco
+    }
+    }
+    
+}
+
+  // Estilos para el botón
+  .boton-centrado {
+    text-align: center;
+  }
+  
+  .boton-registrar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; // Azul
+    color: #ffffff; // Texto blanco
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: #0056b3; // Azul más oscuro al pasar el mouse
+    }
+  }
+  
+  // Estilos para los mensajes
+  .mensaje-exitoso,
+  .mensaje-error {
+    text-align: center;
+    margin-top: 10px;
+    color: #28a745; // Verde para mensaje exitoso, rojo para mensaje de error
+  }
+.icon-button {
+    font-size: 24px; /* Tamaño del icono */
+    width: 48px; /* Ancho del botón */
+    height: 48px; /* Altura del botón */
+    border-radius: 50%; /* Para hacer el botón circular */
+    background-color: #ffffff; /* Color de fondo */
+    border: 2px solid #000000; /* Borde */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    color: #000000; /* Color del icono */
+}
+
+.icon-button:hover {
+    background-color: #e00e0e; /* Cambiar el color de fondo al pasar el ratón */
+}

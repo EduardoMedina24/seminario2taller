@@ -20,6 +20,7 @@ const routes: Routes = [
     path: 'nevel',
     loadChildren: () => import('./pages/nevel/nevel.module').then( m => m.NevelPageModule)
   },
+
 ];
 
 @NgModule({

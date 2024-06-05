@@ -1,6 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Inicio</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="mostrarAutenticacion()">Register</ion-button>
+      <ion-button (click)="mostrarLogin()">Login</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,6 +26,6 @@
           [class.icono-deshabilitado]="jugador.length < 2"></ion-icon>
       </button>
     </div>
-
+  
   </div>
 </ion-content>
