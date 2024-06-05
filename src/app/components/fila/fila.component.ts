@@ -21,13 +21,13 @@ export class FilaComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    console.log(this.palabra)
+    // console.log(this.palabra)
     this.letras = this.palabra.split('');
     this.celdaWidth = `calc(100% / ${this.palabra.length})`;
   }
 
   ngOnChanges() {
-    console.log(this.palabra)
+    // console.log(this.palabra)
     if (this.palabra) {
       this.letras = this.palabra.split('');
       this.celdaWidth = `calc(100% / ${this.palabra.length})`;
@@ -38,7 +38,7 @@ export class FilaComponent implements OnInit {
     this.edicionHabilitada = false;
     this.verificada = true;
     this.actualizarEstadoBotonVerificar();
-    console.log('Verificando fila...');
+    // console.log('Verificando fila...');
   }
 
   actualizarEstadoBotonVerificar() {
