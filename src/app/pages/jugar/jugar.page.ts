@@ -70,9 +70,10 @@ export class JugarPage implements OnInit {
           this.botonEnviarHabilitado = true;
         }
       }
-    } else {
-      console.log("¡Última fila alcanzada!");
-    }
+    } 
+    // else {
+    //   console.log("¡Última fila alcanzada!");
+    // }
   }
 
   iniciarCronometro() {
@@ -87,7 +88,7 @@ export class JugarPage implements OnInit {
 
 
   actualizarEstadoBotonEnviar() {
-    console.log('Fila actual:', this.filaActual);
+    // console.log('Fila actual:', this.filaActual);
     this.botonEnviarHabilitado = this.filas.some(
       (fila) => fila.todasCeldasConLetras && !fila.verificada
     );
@@ -178,7 +179,7 @@ async ngOnInit() {
       console.log('No hay más palabras para seleccionar.');
   }
   
-    console.log(this.iteraciones)
+    // console.log(this.iteraciones)
     console.log("Palabra aleatoria seleccionada:", this.palabra);
     localStorage.setItem('jugador', this.jugador);
     
