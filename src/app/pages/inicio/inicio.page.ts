@@ -21,12 +21,12 @@ export class InicioPage implements OnInit {
     const modal = await this.modalController.create({
       component: AutenticacionComponent,
       componentProps: {
-        // Puedes pasar cualquier propiedad adicional que necesites al componente de autenticación
+        // se  pasa cualquier propiedad adicional que se necesite al componente de autenticación
         jugador: this.jugador
       }
     });
     modal.onDidDismiss().then((data) => {
-      // Recibe el nombre del jugador desde la ventana modal
+      // Recibir el nombre del jugador desde la ventana modal
       if (data && data.data) {
         this.jugador = data.data.nombre;
       }
@@ -47,7 +47,7 @@ export class InicioPage implements OnInit {
 
     return await modal.present();
   }
-   // Navega a la página de selección de dificultad
+
   irAPaginaDificultad() {
     localStorage.setItem('jugador', this.jugador);
     this.router.navigate(['/nevel'], { queryParams: { jugador: this.jugador } });
@@ -55,11 +55,11 @@ export class InicioPage implements OnInit {
   }
 
   ngOnInit() {
-    // Obtén el nombre del jugador desde localStorage si existe
+    // localStorage.removeItem('jugador');
+    // Obténer el nombre del jugador desde localStorage si existe
     const jugadorLocalStorage = localStorage.getItem('jugador');
-    if (jugadorLocalStorage !== null) {
-      this.jugador = jugadorLocalStorage;
-    }
+   
+    this.jugador = jugadorLocalStorage ? jugadorLocalStorage : '';
   }
 
 

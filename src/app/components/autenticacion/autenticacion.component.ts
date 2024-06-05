@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-autenticacion',
@@ -26,8 +26,8 @@ export class AutenticacionComponent  implements OnInit {
       .subscribe(async (response: any) => {
         console.log('Usuario registrado:', response);
         this.registroExitoso = true;
-        await Storage.set({ key: 'usuarioNombre', value: this.nombre });
-        await Storage.set({ key: 'usuarioEmail', value: this.email });
+        await Preferences.set({ key: 'usuarioNombre', value: this.nombre });
+        await Preferences.set({ key: 'usuarioEmail', value: this.email });
         setTimeout(() => {
           this.modalController.dismiss({ nombre: this.nombre });
         }, 3000);
