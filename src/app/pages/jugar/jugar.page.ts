@@ -4,8 +4,9 @@ import { FilaComponent } from 'src/app/components/fila/fila.component';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-import { Storage } from '@capacitor/storage';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { Preferences } from '@capacitor/preferences';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 interface UsuarioConTiempo {
   name: string;
@@ -103,6 +104,7 @@ export class JugarPage implements OnInit {
       
       setTimeout(() => {
         this.ganaste = true;
+        this.verificarYTomarFoto();
       }, 2000);
       this.enviarRegistroGanador(); // Llama a la función para enviar el registro ganador
       setTimeout(() => {
@@ -110,6 +112,18 @@ export class JugarPage implements OnInit {
       }, 5000);
     }
   }
+  async verificarYTomarFoto() {
+    await this.obtenerUsuariosConTiempos();
+
+    const usuarioEstaEnTop5 = this.usuariosConTiempos
+      .slice(0, 5)
+      .some((usuario) => usuario.name === this.jugador);
+
+    if (usuarioEstaEnTop5) {
+      await this.abrirCamara();
+    }
+  }
+
   async enviarRegistroGanador() {
     try {
       const { value: usuarioEmail } = await Preferences.get({ key: 'usuarioEmail' });
@@ -260,5 +274,24 @@ async ngOnInit() {
   }
   redirectToNewPage() {
     this.router.navigate(['/nevel']);
+  }
+  async abrirCamara() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        source: CameraSource.Camera,
+        resultType: CameraResultType.Uri
+      });
+      console.log('Imagen tomada:', image.webPath);
+      // Aquí puedes manejar la lógica para guardar la imagen tomada
+    } catch (error) {
+      // Manejar el error aquí
+      if (error === 'User cancelled photos app') {
+        console.log('El usuario canceló la aplicación de fotos.');
+      } else {
+        console.error('Error al tomar la foto:', error);
+      }
+    }
   }
 }
