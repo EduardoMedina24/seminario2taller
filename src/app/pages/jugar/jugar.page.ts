@@ -114,15 +114,46 @@ export class JugarPage implements OnInit {
   }
   async verificarYTomarFoto() {
     await this.obtenerUsuariosConTiempos();
+    const usuarioExistente = this.usuariosConTiempos.find((usuario) => usuario.name === this.jugador);
+  
+  
+    if (usuarioExistente) {
+      const usuarioExistente = this.usuariosConTiempos.find((usuario) => usuario.name === this.jugador);
+      const tiempoUsuarioActual = usuarioExistente.tiempo;
+      const tiempoNuevo = this.tiempoTranscurrido;
+      await this.verificarHabilitarCamara(tiempoNuevo);
+      if (tiempoNuevo < tiempoUsuarioActual) {
+        await this.abrirCamara();
+      }
+    }
+  }
+  
 
-    const usuarioEstaEnTop5 = this.usuariosConTiempos
-      .slice(0, 5)
-      .some((usuario) => usuario.name === this.jugador);
+async verificarHabilitarCamara(tiempoNuevo: number) {
 
-    if (usuarioEstaEnTop5) {
+  const usuarioEnTabla = this.usuariosConTiempos.some((usuario) => usuario.name === this.jugador);
+
+
+  let tiempoUsuarioActual = Infinity;
+  if (usuarioEnTabla) {
+    const usuarioExistente = this.usuariosConTiempos.find((usuario) => usuario.name === this.jugador);
+    tiempoUsuarioActual = usuarioExistente.tiempo;
+  }
+
+
+  if (usuarioEnTabla && tiempoNuevo < tiempoUsuarioActual) {
+
+    await this.abrirCamara();
+  } else {
+  
+    const tiemposUsuarios: number[] = this.usuariosConTiempos.slice(0, 5).map((usuario) => usuario.tiempo);
+    const menorQueAlguno = tiemposUsuarios.some((tiempoUsuario) => tiempoNuevo < tiempoUsuario);
+
+    if (menorQueAlguno) {
       await this.abrirCamara();
     }
   }
+}
 
   async enviarRegistroGanador() {
     try {
